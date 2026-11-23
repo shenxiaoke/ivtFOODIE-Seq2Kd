@@ -1,0 +1,182 @@
+# Dedicated configuration for the eight four-cycle HT-SELEX TFs present in this delivery.
+project:
+  name: 260916_WZ_HT-SELEX_more_16_uncharacterized_TFs
+  description: Four-cycle TF-DNA HT-SELEX for the eight TFs present in the delivery
+
+input_dir: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs
+results_dir: results_more_16_uncharacterized_TFs
+logs_dir: logs_more_16_uncharacterized_TFs
+
+samples:
+  GTF2IRD2B:
+    tf: GTF2IRD2B
+    baseline: &shared_baseline
+      name: cycle0
+      sequence_file: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/autoseed_HT-SELEX-pipeline/N501-701_S2_L004_R1_001_40nt_sequence.txt
+    rounds:
+      cycle1:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-GTF2IRD2B-cycle1_L2_Q1185W0004.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-GTF2IRD2B-cycle1_L2_Q1185W0004.R2.fastq.gz
+      cycle2:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-GTF2IRD2B-cycle2_L3_Q1185W0004.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-GTF2IRD2B-cycle2_L3_Q1185W0004.R2.fastq.gz
+      cycle3:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-GTF2IRD2B-cycle3_L5_Q1185W0004.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-GTF2IRD2B-cycle3_L5_Q1185W0004.R2.fastq.gz
+      cycle4:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-GTF2IRD2B-cycle4_L1_Q1185W0004.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-GTF2IRD2B-cycle4_L1_Q1185W0004.R2.fastq.gz
+  MTERF4:
+    tf: MTERF4
+    baseline: *shared_baseline
+    rounds:
+      cycle1:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-MTERF4-cycle1_L2_Q0391W0159.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-MTERF4-cycle1_L2_Q0391W0159.R2.fastq.gz
+      cycle2:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-MTERF4-cycle2_L3_Q0391W0159.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-MTERF4-cycle2_L3_Q0391W0159.R2.fastq.gz
+      cycle3:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-MTERF4-cycle3_L5_Q0391W0159.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-MTERF4-cycle3_L5_Q0391W0159.R2.fastq.gz
+      cycle4:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-MTERF4-cycle4_L1_Q0391W0159.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-MTERF4-cycle4_L1_Q0391W0159.R2.fastq.gz
+  NANOGP8:
+    tf: NANOGP8
+    baseline: *shared_baseline
+    rounds:
+      cycle1:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NANOGP8-cycle1_L2_Q0003W0061.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NANOGP8-cycle1_L2_Q0003W0061.R2.fastq.gz
+      cycle2:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NANOGP8-cycle2_L3_Q0003W0061.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NANOGP8-cycle2_L3_Q0003W0061.R2.fastq.gz
+      cycle3:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NANOGP8-cycle3_L5_Q0003W0061.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NANOGP8-cycle3_L5_Q0003W0061.R2.fastq.gz
+      cycle4:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NANOGP8-cycle4_L1_Q0003W0061.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NANOGP8-cycle4_L1_Q0003W0061.R2.fastq.gz
+  NCOA2:
+    tf: NCOA2
+    baseline: *shared_baseline
+    rounds:
+      cycle1:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NCOA2-cycle1_L2_Q0389W0003.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NCOA2-cycle1_L2_Q0389W0003.R2.fastq.gz
+      cycle2:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NCOA2-cycle2_L3_Q0389W0003.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NCOA2-cycle2_L3_Q0389W0003.R2.fastq.gz
+      cycle3:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NCOA2-cycle3_L5_Q0389W0003.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NCOA2-cycle3_L5_Q0389W0003.R2.fastq.gz
+      cycle4:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NCOA2-cycle4_L1_Q0389W0003.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NCOA2-cycle4_L1_Q0389W0003.R2.fastq.gz
+  NEUROD4:
+    tf: NEUROD4
+    baseline: *shared_baseline
+    rounds:
+      cycle1:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NEUROD4-cycle1_L2_Q0004W0063.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NEUROD4-cycle1_L2_Q0004W0063.R2.fastq.gz
+      cycle2:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NEUROD4-cycle2_L3_Q0004W0063.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NEUROD4-cycle2_L3_Q0004W0063.R2.fastq.gz
+      cycle3:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NEUROD4-cycle3_L5_Q0004W0063.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NEUROD4-cycle3_L5_Q0004W0063.R2.fastq.gz
+      cycle4:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NEUROD4-cycle4_L1_Q0004W0063.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NEUROD4-cycle4_L1_Q0004W0063.R2.fastq.gz
+  NFX1:
+    tf: NFX1
+    baseline: *shared_baseline
+    rounds:
+      cycle1:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NFX1-cycle1_L2_Q1186W0157.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NFX1-cycle1_L2_Q1186W0157.R2.fastq.gz
+      cycle2:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NFX1-cycle2_L3_Q1186W0157.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NFX1-cycle2_L3_Q1186W0157.R2.fastq.gz
+      cycle3:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NFX1-cycle3_L5_Q1186W0157.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NFX1-cycle3_L5_Q1186W0157.R2.fastq.gz
+      cycle4:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NFX1-cycle4_L1_Q1186W0157.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-NFX1-cycle4_L1_Q1186W0157.R2.fastq.gz
+  SCML4:
+    tf: SCML4
+    baseline: *shared_baseline
+    rounds:
+      cycle1:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-SCML4-cycle1_L2_Q0390W0156.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-SCML4-cycle1_L2_Q0390W0156.R2.fastq.gz
+      cycle2:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-SCML4-cycle2_L3_Q0390W0156.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-SCML4-cycle2_L3_Q0390W0156.R2.fastq.gz
+      cycle3:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-SCML4-cycle3_L5_Q0390W0156.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-SCML4-cycle3_L5_Q0390W0156.R2.fastq.gz
+      cycle4:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-SCML4-cycle4_L1_Q0390W0156.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-SCML4-cycle4_L1_Q0390W0156.R2.fastq.gz
+  TFAP2D:
+    tf: TFAP2D
+    baseline: *shared_baseline
+    rounds:
+      cycle1:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-TFAP2D-cycle1_L2_Q0392W0200.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-TFAP2D-cycle1_L2_Q0392W0200.R2.fastq.gz
+      cycle2:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-TFAP2D-cycle2_L3_Q0392W0200.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-TFAP2D-cycle2_L3_Q0392W0200.R2.fastq.gz
+      cycle3:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-TFAP2D-cycle3_L5_Q0392W0200.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-TFAP2D-cycle3_L5_Q0392W0200.R2.fastq.gz
+      cycle4:
+        r1: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-TFAP2D-cycle4_L1_Q0392W0200.R1.fastq.gz
+        r2: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/data_more_16_uncharacterized_TFs/260911-HTselex-TFAP2D-cycle4_L1_Q0392W0200.R2.fastq.gz
+
+preprocessing:
+  threads_per_sample: 8
+  qualified_quality_phred: 20
+  unqualified_percent_limit: 40
+  n_base_limit: 2
+  length_required: 40
+  adapter_r1: AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+  adapter_r2: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+extraction:
+  mode: paired_consensus
+  random_region_length: 40
+  start_1based: 1
+  primer_5: ""
+  primer_3: ""
+  max_pair_mismatches: 2
+  minimum_quality_delta_at_mismatch: 1
+
+counting:
+  sort_memory: 8G
+  sort_threads: 8
+
+enrichment:
+  pseudocount: 1.0
+  include_adjacent_round_comparisons: true
+
+motif:
+  final_round: cycle4
+  background_round: cycle0
+  sample_seed: 20260916
+  streme_max_sequences_per_round: 100000
+  hts_ibis_max_sequences_per_round: 1000000
+  hts_ibis_scan_pvalue: 0.0001
+  min_width: 6
+  max_width: 15
+  number_of_motifs: 10
+  hts_ibis_java_memory: 48G
+
+software:
+  hts_ibis_jar: software/HTS-IBIS/HTS-IBIS.jar
+  hts_ibis_source: https://acgt.cs.tau.ac.il/hts-ibis/HTS-IBIS.zip

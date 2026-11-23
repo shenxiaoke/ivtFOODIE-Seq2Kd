@@ -1,0 +1,8 @@
+results/*/*
+results/.config_validated
+logs/**/*.log
+logs/slurm/*
+.snakemake/
+__pycache__/
+.pytest_cache/
+*.pyc

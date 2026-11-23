@@ -1,0 +1,418 @@
+from pathlib import Path
+
+PIPELINE_DIR = Path(workflow.basedir).parent.resolve()
+CONFIGFILE = str(workflow.configfiles[0]) if workflow.configfiles else "config.yaml"
+RESULTS = config.get("results_dir", "results")
+LOGS = config.get("logs_dir", "logs")
+TFS = list(config["samples"])
+SELECTED_ROUNDS = {tf: list(config["samples"][tf]["rounds"]) for tf in TFS}
+BASELINE = {tf: config["samples"][tf]["baseline"]["name"] for tf in TFS}
+ALL_ROUNDS = {tf: [BASELINE[tf]] + SELECTED_ROUNDS[tf] for tf in TFS}
+ROUND_PATTERN = "|".join(sorted({r for rounds in ALL_ROUNDS.values() for r in rounds}))
+SELECTED_PATTERN = "|".join(sorted({r for rounds in SELECTED_ROUNDS.values() for r in rounds}))
+PAIR_LOOKUP = {
+    (tf, f"{current}_vs_{previous}"): (current, previous)
+    for tf in TFS
+    for previous, current in zip(ALL_ROUNDS[tf][:-1], ALL_ROUNDS[tf][1:])
+}
+PAIRWISE_COMPARISONS = {
+    tf: [label for pair_tf, label in PAIR_LOOKUP if pair_tf == tf]
+    for tf in TFS
+}
+COMPARISON_PATTERN = "|".join(sorted({label for _, label in PAIR_LOOKUP}))
+PAIRWISE_STREME_HTMLS = [
+    f"{RESULTS}/motifs/{tf}/streme_pairwise/{label}/streme.html"
+    for tf in TFS for label in PAIRWISE_COMPARISONS[tf]
+]
+PAIRWISE_STREME_LOGOS = [
+    f"{RESULTS}/motifs/{tf}/streme_pairwise/{label}/motif1.logo.png"
+    for tf in TFS for label in PAIRWISE_COMPARISONS[tf]
+]
+HTS_PWM_PREVALENCE_TABLES = [
+    f"{RESULTS}/motifs/{tf}/hts_ibis/prevalence_by_cycle.tsv" for tf in TFS
+]
+HTS_PWM_PREVALENCE_PLOTS = [
+    f"{RESULTS}/motifs/{tf}/hts_ibis/prevalence_by_cycle.png" for tf in TFS
+]
+
+
+def raw_fastq(wildcards, mate):
+    return config["samples"][wildcards.tf]["rounds"][wildcards.round][mate]
+
+
+def round_count_files(wildcards):
+    return [f"{RESULTS}/counts/{wildcards.tf}/{r}.counts.tsv.gz" for r in ALL_ROUNDS[wildcards.tf]]
+
+
+def round_count_args(wildcards):
+    return " ".join(
+        f"--round {r}={RESULTS}/counts/{wildcards.tf}/{r}.counts.tsv.gz"
+        for r in ALL_ROUNDS[wildcards.tf]
+    )
+
+
+def hts_fastqs(wildcards):
+    return [f"{RESULTS}/motifs/{wildcards.tf}/hts_ibis/input/{r}.fastq" for r in ALL_ROUNDS[wildcards.tf]]
+
+
+def pairwise_streme_input(wildcards, member):
+    positive, control = PAIR_LOOKUP[(wildcards.tf, wildcards.comparison)]
+    round_name = positive if member == "positive" else control
+    return f"{RESULTS}/motifs/{wildcards.tf}/streme_input/{round_name}.fasta"
+
+
+def hts_pwm_scan_fastas(wildcards):
+    return [
+        f"{RESULTS}/motifs/{wildcards.tf}/hts_ibis/input/{round_name}.fasta"
+        for round_name in ALL_ROUNDS[wildcards.tf]
+    ]
+
+
+def hts_pwm_scan_stats(wildcards):
+    return [
+        f"{RESULTS}/motifs/{wildcards.tf}/hts_ibis/input/{round_name}.sampling.json"
+        for round_name in ALL_ROUNDS[wildcards.tf]
+    ]
+
+
+def hts_pwm_scan_args(wildcards):
+    return " ".join(
+        f"--round {round_name}={RESULTS}/motifs/{wildcards.tf}/hts_ibis/input/{round_name}.fasta="
+        f"{RESULTS}/motifs/{wildcards.tf}/hts_ibis/input/{round_name}.sampling.json"
+        for round_name in ALL_ROUNDS[wildcards.tf]
+    )
+
+
+wildcard_constraints:
+    tf="|".join(TFS),
+    round=ROUND_PATTERN,
+    comparison=COMPARISON_PATTERN
+
+
+rule all:
+    input:
+        f"{RESULTS}/report/index.html",
+        expand(f"{RESULTS}/counts/{{tf}}/sequence_counts.tsv.gz", tf=TFS),
+        expand(f"{RESULTS}/enrichment/{{tf}}/sequence_enrichment.tsv.gz", tf=TFS),
+        expand(f"{RESULTS}/motifs/{{tf}}/hts_ibis/{{tf}}.pwm", tf=TFS),
+        expand(f"{RESULTS}/motifs/{{tf}}/streme/streme.html", tf=TFS),
+        expand(f"{RESULTS}/motifs/{{tf}}/tomtom/tomtom.html", tf=TFS),
+        PAIRWISE_STREME_HTMLS,
+        PAIRWISE_STREME_LOGOS,
+        HTS_PWM_PREVALENCE_TABLES,
+        HTS_PWM_PREVALENCE_PLOTS
+
+
+rule validate_config:
+    input:
+        CONFIGFILE
+    output:
+        f"{RESULTS}/.config_validated"
+    log:
+        f"{LOGS}/validate_config.log"
+    shell:
+        "python scripts/00_validate_config.py --config {input} --output {output} > {log} 2>&1"
+
+
+rule fastp:
+    input:
+        validated=f"{RESULTS}/.config_validated",
+        r1=lambda wc: raw_fastq(wc, "r1"),
+        r2=lambda wc: raw_fastq(wc, "r2")
+    output:
+        r1=f"{RESULTS}/clean_fastq/{{tf}}/{{round}}.clean_R1.fastq.gz",
+        r2=f"{RESULTS}/clean_fastq/{{tf}}/{{round}}.clean_R2.fastq.gz",
+        html=f"{RESULTS}/clean_fastq/{{tf}}/{{round}}.fastp.html",
+        json=f"{RESULTS}/clean_fastq/{{tf}}/{{round}}.fastp.json"
+    wildcard_constraints:
+        round=SELECTED_PATTERN
+    threads:
+        config["preprocessing"]["threads_per_sample"]
+    resources:
+        mem_mb=16000
+    params:
+        q=config["preprocessing"]["qualified_quality_phred"],
+        unqual=config["preprocessing"]["unqualified_percent_limit"],
+        n=config["preprocessing"]["n_base_limit"],
+        minlen=config["preprocessing"]["length_required"],
+        adapters=lambda wc: f"{config['preprocessing']['adapter_r1']},{config['preprocessing']['adapter_r2']}"
+    log:
+        f"{LOGS}/fastp/{{tf}}.{{round}}.log"
+    shell:
+        "scripts/01_fastp.sh {input.r1} {input.r2} {output.r1} {output.r2} {output.html} {output.json} "
+        "{threads} {params.q} {params.unqual} {params.n} {params.minlen} {params.adapters} > {log} 2>&1"
+
+
+rule materialize_cycle0:
+    input:
+        validated=f"{RESULTS}/.config_validated",
+        sequence=lambda wc: config["samples"][wc.tf]["baseline"]["sequence_file"]
+    output:
+        sequences=f"{RESULTS}/sequences/{{tf}}/cycle0.sequences.txt.gz",
+        fasta=f"{RESULTS}/sequences/{{tf}}/cycle0.fasta.gz",
+        fastq=f"{RESULTS}/sequences/{{tf}}/cycle0.fastq.gz",
+        stats=f"{RESULTS}/sequences/{{tf}}/cycle0.extraction.json"
+    params:
+        length=config["extraction"]["random_region_length"]
+    log:
+        f"{LOGS}/extraction/{{tf}}.cycle0.log"
+    shell:
+        "python scripts/02_extract_variable_region.py --sequence-file {input.sequence} --length {params.length} "
+        "--sequences {output.sequences} --fasta {output.fasta} --fastq {output.fastq} --stats {output.stats} > {log} 2>&1"
+
+
+rule extract_selected:
+    input:
+        r1=f"{RESULTS}/clean_fastq/{{tf}}/{{round}}.clean_R1.fastq.gz",
+        r2=f"{RESULTS}/clean_fastq/{{tf}}/{{round}}.clean_R2.fastq.gz"
+    output:
+        sequences=f"{RESULTS}/sequences/{{tf}}/{{round}}.sequences.txt.gz",
+        fasta=f"{RESULTS}/sequences/{{tf}}/{{round}}.fasta.gz",
+        fastq=f"{RESULTS}/sequences/{{tf}}/{{round}}.fastq.gz",
+        stats=f"{RESULTS}/sequences/{{tf}}/{{round}}.extraction.json"
+    wildcard_constraints:
+        round=SELECTED_PATTERN
+    params:
+        length=config["extraction"]["random_region_length"],
+        start=config["extraction"]["start_1based"],
+        mismatches=config["extraction"]["max_pair_mismatches"],
+        delta=config["extraction"]["minimum_quality_delta_at_mismatch"]
+    log:
+        f"{LOGS}/extraction/{{tf}}.{{round}}.log"
+    shell:
+        "python scripts/02_extract_variable_region.py --r1 {input.r1} --r2 {input.r2} "
+        "--length {params.length} --start {params.start} --max-mismatches {params.mismatches} "
+        "--min-quality-delta {params.delta} --sequences {output.sequences} --fasta {output.fasta} "
+        "--fastq {output.fastq} --stats {output.stats} > {log} 2>&1"
+
+
+rule count_round:
+    input:
+        f"{RESULTS}/sequences/{{tf}}/{{round}}.sequences.txt.gz"
+    output:
+        counts=f"{RESULTS}/counts/{{tf}}/{{round}}.counts.tsv.gz",
+        summary=f"{RESULTS}/counts/{{tf}}/{{round}}.counts.summary.json"
+    threads:
+        config["counting"]["sort_threads"]
+    resources:
+        mem_mb=12000
+    params:
+        memory=config["counting"]["sort_memory"],
+        tmp=lambda wc: f"{RESULTS}/counts/{wc.tf}/sort_tmp_{wc.round}"
+    log:
+        f"{LOGS}/counting/{{tf}}.{{round}}.log"
+    shell:
+        "python scripts/03_count_sequences.py count --input {input} --output {output.counts} "
+        "--summary {output.summary} --threads {threads} --memory {params.memory} --temp-dir {params.tmp} > {log} 2>&1"
+
+
+rule merge_counts:
+    input:
+        round_count_files
+    output:
+        counts=f"{RESULTS}/counts/{{tf}}/sequence_counts.tsv.gz",
+        summary=f"{RESULTS}/counts/{{tf}}/sequence_counts.summary.json"
+    params:
+        args=round_count_args
+    log:
+        f"{LOGS}/counting/{{tf}}.merge.log"
+    shell:
+        "python scripts/03_count_sequences.py merge {params.args} --output {output.counts} --summary {output.summary} > {log} 2>&1"
+
+
+rule enrichment:
+    input:
+        counts=f"{RESULTS}/counts/{{tf}}/sequence_counts.tsv.gz",
+        summary=f"{RESULTS}/counts/{{tf}}/sequence_counts.summary.json"
+    output:
+        table=f"{RESULTS}/enrichment/{{tf}}/sequence_enrichment.tsv.gz",
+        summary=f"{RESULTS}/enrichment/{{tf}}/sequence_enrichment.summary.json"
+    params:
+        alpha=config["enrichment"]["pseudocount"],
+        adjacent="--adjacent" if config["enrichment"].get("include_adjacent_round_comparisons", True) else ""
+    log:
+        f"{LOGS}/enrichment/{{tf}}.log"
+    shell:
+        "python scripts/04_calculate_enrichment.py --counts {input.counts} --summary {input.summary} "
+        "--output {output.table} --output-summary {output.summary} --baseline cycle0 "
+        "--pseudocount {params.alpha} {params.adjacent} > {log} 2>&1"
+
+
+rule prepare_hts_ibis_input:
+    input:
+        f"{RESULTS}/counts/{{tf}}/{{round}}.counts.tsv.gz"
+    output:
+        fasta=f"{RESULTS}/motifs/{{tf}}/hts_ibis/input/{{round}}.fasta",
+        fastq=f"{RESULTS}/motifs/{{tf}}/hts_ibis/input/{{round}}.fastq",
+        stats=f"{RESULTS}/motifs/{{tf}}/hts_ibis/input/{{round}}.sampling.json"
+    params:
+        maximum=config["motif"]["hts_ibis_max_sequences_per_round"],
+        seed=lambda wc: config["motif"]["sample_seed"] + ALL_ROUNDS[wc.tf].index(wc.round)
+    log:
+        f"{LOGS}/motifs/{{tf}}.{{round}}.hts_input.log"
+    shell:
+        "python scripts/05_prepare_motif_input.py --counts {input} --round {wildcards.round} "
+        "--max-sequences {params.maximum} --seed {params.seed} --fasta {output.fasta} "
+        "--fastq {output.fastq} --stats {output.stats} > {log} 2>&1"
+
+
+rule run_hts_ibis:
+    input:
+        jar=config["software"]["hts_ibis_jar"],
+        fastqs=hts_fastqs
+    output:
+        f"{RESULTS}/motifs/{{tf}}/hts_ibis/{{tf}}.pwm"
+    params:
+        memory=config["motif"]["hts_ibis_java_memory"],
+        fastqs=lambda wc, input: " ".join(input.fastqs)
+    resources:
+        mem_mb=56000
+    log:
+        f"{LOGS}/motifs/{{tf}}.hts_ibis.log"
+    shell:
+        "scripts/05_run_hts_ibis.sh {input.jar} {params.memory} {output} {params.fastqs} > {log} 2>&1"
+
+
+rule convert_hts_ibis_pwm:
+    input:
+        f"{RESULTS}/motifs/{{tf}}/hts_ibis/{{tf}}.pwm"
+    output:
+        meme=f"{RESULTS}/motifs/{{tf}}/hts_ibis/{{tf}}.meme",
+        logo=f"{RESULTS}/motifs/{{tf}}/hts_ibis/logo.png"
+    log:
+        f"{LOGS}/motifs/{{tf}}.hts_ibis_convert.log"
+    shell:
+        "python scripts/05_hts_ibis_pwm_to_meme.py --input {input} --meme {output.meme} "
+        "--logo {output.logo} --name {wildcards.tf}_HTS_IBIS > {log} 2>&1"
+
+
+rule scan_hts_ibis_pwm_by_cycle:
+    input:
+        meme=f"{RESULTS}/motifs/{{tf}}/hts_ibis/{{tf}}.meme",
+        fastas=hts_pwm_scan_fastas,
+        stats=hts_pwm_scan_stats
+    output:
+        table=f"{RESULTS}/motifs/{{tf}}/hts_ibis/prevalence_by_cycle.tsv",
+        summary=f"{RESULTS}/motifs/{{tf}}/hts_ibis/prevalence_by_cycle.json",
+        plot=f"{RESULTS}/motifs/{{tf}}/hts_ibis/prevalence_by_cycle.png"
+    resources:
+        mem_mb=4000
+    params:
+        rounds=hts_pwm_scan_args,
+        pvalue=config["motif"].get("hts_ibis_scan_pvalue", 1e-4)
+    log:
+        f"{LOGS}/motifs/{{tf}}.hts_ibis_prevalence.log"
+    shell:
+        "python scripts/08_scan_pwm_prevalence.py --meme {input.meme} {params.rounds} "
+        "--pvalue {params.pvalue} --tf {wildcards.tf} --output {output.table} "
+        "--summary {output.summary} --plot {output.plot} > {log} 2>&1"
+
+
+rule prepare_streme_input:
+    input:
+        f"{RESULTS}/counts/{{tf}}/{{round}}.counts.tsv.gz"
+    output:
+        fasta=f"{RESULTS}/motifs/{{tf}}/streme_input/{{round}}.fasta",
+        fastq=f"{RESULTS}/motifs/{{tf}}/streme_input/{{round}}.fastq",
+        stats=f"{RESULTS}/motifs/{{tf}}/streme_input/{{round}}.sampling.json"
+    params:
+        maximum=config["motif"]["streme_max_sequences_per_round"],
+        seed=lambda wc: config["motif"]["sample_seed"] + 100 + ALL_ROUNDS[wc.tf].index(wc.round)
+    log:
+        f"{LOGS}/motifs/{{tf}}.{{round}}.streme_input.log"
+    shell:
+        "python scripts/05_prepare_motif_input.py --counts {input} --round {wildcards.round} "
+        "--max-sequences {params.maximum} --seed {params.seed} --fasta {output.fasta} "
+        "--fastq {output.fastq} --stats {output.stats} > {log} 2>&1"
+
+
+rule run_streme_and_tomtom:
+    input:
+        positive=lambda wc: f"{RESULTS}/motifs/{wc.tf}/streme_input/{config['motif']['final_round']}.fasta",
+        control=lambda wc: f"{RESULTS}/motifs/{wc.tf}/streme_input/{config['motif']['background_round']}.fasta",
+        hts_meme=f"{RESULTS}/motifs/{{tf}}/hts_ibis/{{tf}}.meme"
+    output:
+        streme_txt=f"{RESULTS}/motifs/{{tf}}/streme/streme.txt",
+        streme_html=f"{RESULTS}/motifs/{{tf}}/streme/streme.html",
+        tomtom_html=f"{RESULTS}/motifs/{{tf}}/tomtom/tomtom.html"
+    threads:
+        1
+    resources:
+        mem_mb=16000
+    params:
+        outdir=lambda wc: f"{RESULTS}/motifs/{wc.tf}/streme",
+        tomtom=lambda wc: f"{RESULTS}/motifs/{wc.tf}/tomtom",
+        minw=config["motif"]["min_width"],
+        maxw=config["motif"]["max_width"],
+        nmotifs=config["motif"]["number_of_motifs"]
+    log:
+        f"{LOGS}/motifs/{{tf}}.streme.log"
+    shell:
+        "scripts/06_run_meme.sh {input.positive} {input.control} {params.outdir} {threads} "
+        "{params.minw} {params.maxw} {params.nmotifs} {input.hts_meme} {params.tomtom} > {log} 2>&1"
+
+
+rule run_pairwise_streme:
+    input:
+        positive=lambda wc: pairwise_streme_input(wc, "positive"),
+        control=lambda wc: pairwise_streme_input(wc, "control")
+    output:
+        txt=f"{RESULTS}/motifs/{{tf}}/streme_pairwise/{{comparison}}/streme.txt",
+        html=f"{RESULTS}/motifs/{{tf}}/streme_pairwise/{{comparison}}/streme.html",
+        logo=f"{RESULTS}/motifs/{{tf}}/streme_pairwise/{{comparison}}/motif1.logo.png"
+    threads:
+        1
+    resources:
+        mem_mb=16000
+    params:
+        outdir=lambda wc: f"{RESULTS}/motifs/{wc.tf}/streme_pairwise/{wc.comparison}",
+        minw=config["motif"]["min_width"],
+        maxw=config["motif"]["max_width"],
+        nmotifs=config["motif"]["number_of_motifs"],
+        title=lambda wc: f"{wc.tf} {wc.comparison.replace('_', ' ')}"
+    log:
+        f"{LOGS}/motifs/{{tf}}.{{comparison}}.streme.log"
+    shell:
+        "scripts/06_run_pairwise_streme.sh {input.positive} {input.control} {params.outdir} {threads} "
+        "{params.minw} {params.maxw} {params.nmotifs} '{params.title}' > {log} 2>&1"
+
+
+rule software_versions:
+    output:
+        f"{RESULTS}/report/software_versions.txt"
+    log:
+        f"{LOGS}/report/software_versions.log"
+    shell:
+        r"""(
+        echo "generated_utc: $(date -u +%FT%TZ)"
+        echo "python: $(python --version 2>&1)"
+        echo "snakemake: $(snakemake --version 2>&1)"
+        echo "fastp: $(fastp --version 2>&1 | head -1)"
+        echo "seqkit: $(seqkit version 2>&1)"
+        echo "fastx_trimmer: $(command -v fastx_trimmer)"
+        echo "streme: $(streme --version 2>&1 | head -1)"
+        echo "java: $(java -version 2>&1 | head -1)"
+        sha256sum software/HTS-IBIS/HTS-IBIS.jar
+        ) > {output} 2> {log}"""
+
+
+rule report:
+    input:
+        config_file=CONFIGFILE,
+        versions=f"{RESULTS}/report/software_versions.txt",
+        extraction=expand(f"{RESULTS}/sequences/{{tf}}/{{round}}.extraction.json", zip, tf=[tf for tf in TFS for _ in ALL_ROUNDS[tf]], round=[r for tf in TFS for r in ALL_ROUNDS[tf]]),
+        counts=expand(f"{RESULTS}/counts/{{tf}}/sequence_counts.summary.json", tf=TFS),
+        enrichment=expand(f"{RESULTS}/enrichment/{{tf}}/sequence_enrichment.tsv.gz", tf=TFS),
+        logos=expand(f"{RESULTS}/motifs/{{tf}}/hts_ibis/logo.png", tf=TFS),
+        streme=expand(f"{RESULTS}/motifs/{{tf}}/streme/streme.html", tf=TFS),
+        tomtom=expand(f"{RESULTS}/motifs/{{tf}}/tomtom/tomtom.html", tf=TFS),
+        pairwise_streme=PAIRWISE_STREME_HTMLS,
+        pairwise_logos=PAIRWISE_STREME_LOGOS,
+        hts_prevalence=HTS_PWM_PREVALENCE_TABLES,
+        hts_prevalence_plots=HTS_PWM_PREVALENCE_PLOTS
+    output:
+        f"{RESULTS}/report/index.html"
+    log:
+        f"{LOGS}/report/generate_report.log"
+    shell:
+        "python scripts/07_generate_report.py --config {input.config_file} --root . --output {output} > {log} 2>&1"

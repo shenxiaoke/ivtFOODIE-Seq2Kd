@@ -1,0 +1,2 @@
+snakemake-executor-plugin-slurm==2.8.0
+snakemake-executor-plugin-slurm-jobstep==0.6.0

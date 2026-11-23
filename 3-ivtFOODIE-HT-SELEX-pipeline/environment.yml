@@ -1,0 +1,23 @@
+name: htselex_env
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.11
+  - snakemake-minimal>=8
+  - fastp>=0.23
+  - seqkit>=2.8
+  - fastx_toolkit=0.0.14
+  - meme>=5.5
+  - openjdk=17
+  - pigz
+  - pandas>=2.0
+  - numpy>=1.26
+  - scipy>=1.11
+  - matplotlib>=3.8
+  - seaborn>=0.13
+  - biopython>=1.83
+  - pyyaml>=6
+  - jinja2>=3.1
+  - logomaker>=0.8
+  - pytest>=8

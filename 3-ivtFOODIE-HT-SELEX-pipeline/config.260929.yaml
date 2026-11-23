@@ -1,0 +1,166 @@
+# Dedicated configuration for the 20260929 B4 follow-up delivery (7 TFs).
+project:
+  name: 260929_WZ_HT-SELEX_7_uncharacterized_TFs
+  description: Four-cycle TF-DNA HT-SELEX for the seven TFs in the B4 follow-up delivery
+
+input_dir: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929
+results_dir: results_260929
+logs_dir: logs_260929
+
+samples:
+  AKNA:
+    tf: AKNA
+    baseline: &shared_baseline
+      name: cycle0
+      sequence_file: inputs/260911_WZ_HT-SELEX_ivtFOODIE_NR4A3_NKX2-6/HT-SELEX/autoseed_HT-SELEX-pipeline/N501-701_S2_L004_R1_001_40nt_sequence.txt
+    rounds:
+      cycle1:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-AKNA-cycle1_L2_Q0390W0156.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-AKNA-cycle1_L2_Q0390W0156.R2.fastq.gz
+      cycle2:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-AKNA-cycle2_L4_Q0390W0156.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-AKNA-cycle2_L4_Q0390W0156.R2.fastq.gz
+      cycle3:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-AKNA-cycle3_L3_Q0390W0156.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-AKNA-cycle3_L3_Q0390W0156.R2.fastq.gz
+      cycle4:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-AKNA-cycle4_L1_Q0390W0156.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-AKNA-cycle4_L1_Q0390W0156.R2.fastq.gz
+  ANHX:
+    tf: ANHX
+    baseline: *shared_baseline
+    rounds:
+      cycle1:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ANHX-cycle1_L2_Q0391W0159.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ANHX-cycle1_L2_Q0391W0159.R2.fastq.gz
+      cycle2:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ANHX-cycle2_L4_Q0391W0159.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ANHX-cycle2_L4_Q0391W0159.R2.fastq.gz
+      cycle3:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ANHX-cycle3_L3_Q0391W0159.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ANHX-cycle3_L3_Q0391W0159.R2.fastq.gz
+      cycle4:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ANHX-cycle4_L1_Q0391W0159.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ANHX-cycle4_L1_Q0391W0159.R2.fastq.gz
+  ARX:
+    tf: ARX
+    baseline: *shared_baseline
+    rounds:
+      cycle1:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ARX-cycle1_L2_Q1185W0004.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ARX-cycle1_L2_Q1185W0004.R2.fastq.gz
+      cycle2:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ARX-cycle2_L4_Q1185W0004.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ARX-cycle2_L4_Q1185W0004.R2.fastq.gz
+      cycle3:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ARX-cycle3_L3_Q1185W0004.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ARX-cycle3_L3_Q1185W0004.R2.fastq.gz
+      cycle4:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ARX-cycle4_L1_Q1185W0004.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-ARX-cycle4_L1_Q1185W0004.R2.fastq.gz
+  DUX1:
+    tf: DUX1
+    baseline: *shared_baseline
+    rounds:
+      cycle1:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-DUX1-cycle1_L2_Q0392W0200.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-DUX1-cycle1_L2_Q0392W0200.R2.fastq.gz
+      cycle2:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-DUX1-cycle2_L4_Q0392W0200.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-DUX1-cycle2_L4_Q0392W0200.R2.fastq.gz
+      cycle3:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-DUX1-cycle3_L3_Q0392W0200.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-DUX1-cycle3_L3_Q0392W0200.R2.fastq.gz
+      cycle4:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-DUX1-cycle4_L1_Q0392W0200.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-DUX1-cycle4_L1_Q0392W0200.R2.fastq.gz
+  LIN28B:
+    tf: LIN28B
+    baseline: *shared_baseline
+    rounds:
+      cycle1:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-LIN28B-cycle1_L2_Q0389W0003.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-LIN28B-cycle1_L2_Q0389W0003.R2.fastq.gz
+      cycle2:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-LIN28B-cycle2_L4_Q0389W0003.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-LIN28B-cycle2_L4_Q0389W0003.R2.fastq.gz
+      cycle3:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-LIN28B-cycle3_L3_Q0389W0003.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-LIN28B-cycle3_L3_Q0389W0003.R2.fastq.gz
+      cycle4:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-LIN28B-cycle4_L1_Q0389W0003.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-LIN28B-cycle4_L1_Q0389W0003.R2.fastq.gz
+  PRR12:
+    tf: PRR12
+    baseline: *shared_baseline
+    rounds:
+      cycle1:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-PRR12-cycle1_L2_Q1186W0157.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-PRR12-cycle1_L2_Q1186W0157.R2.fastq.gz
+      cycle2:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-PRR12-cycle2_L4_Q1186W0157.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-PRR12-cycle2_L4_Q1186W0157.R2.fastq.gz
+      cycle3:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-PRR12-cycle3_L3_Q1186W0157.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-PRR12-cycle3_L3_Q1186W0157.R2.fastq.gz
+      cycle4:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-PRR12-cycle4_L1_Q1186W0157.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-PRR12-cycle4_L1_Q1186W0157.R2.fastq.gz
+  YBX2:
+    tf: YBX2
+    baseline: *shared_baseline
+    rounds:
+      cycle1:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-YBX2-cycle1_L2_Q0004W0063.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-YBX2-cycle1_L2_Q0004W0063.R2.fastq.gz
+      cycle2:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-YBX2-cycle2_L4_Q0004W0063.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-YBX2-cycle2_L4_Q0004W0063.R2.fastq.gz
+      cycle3:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-YBX2-cycle3_L3_Q0004W0063.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-YBX2-cycle3_L3_Q0004W0063.R2.fastq.gz
+      cycle4:
+        r1: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-YBX2-cycle4_L1_Q0004W0063.R1.fastq.gz
+        r2: inputs/260916_WZ_HT-SELEX_ivtFOODIE_16_uncharacterized_TFs/HT-SELEX/data_more_more260929/260922-HTselex-YBX2-cycle4_L1_Q0004W0063.R2.fastq.gz
+
+preprocessing:
+  threads_per_sample: 8
+  qualified_quality_phred: 20
+  unqualified_percent_limit: 40
+  n_base_limit: 2
+  length_required: 40
+  adapter_r1: AGATCGGAAGAGCACACGTCTGAACTCCAGTCA
+  adapter_r2: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+
+extraction:
+  mode: paired_consensus
+  random_region_length: 40
+  start_1based: 1
+  primer_5: ""
+  primer_3: ""
+  max_pair_mismatches: 2
+  minimum_quality_delta_at_mismatch: 1
+
+counting:
+  sort_memory: 8G
+  sort_threads: 8
+
+enrichment:
+  pseudocount: 1.0
+  include_adjacent_round_comparisons: true
+
+motif:
+  final_round: cycle4
+  background_round: cycle0
+  sample_seed: 20260929
+  streme_max_sequences_per_round: 100000
+  hts_ibis_max_sequences_per_round: 1000000
+  hts_ibis_scan_pvalue: 0.0001
+  min_width: 6
+  max_width: 15
+  number_of_motifs: 10
+  hts_ibis_java_memory: 48G
+
+software:
+  hts_ibis_jar: software/HTS-IBIS/HTS-IBIS.jar
+  hts_ibis_source: https://acgt.cs.tau.ac.il/hts-ibis/HTS-IBIS.zip
